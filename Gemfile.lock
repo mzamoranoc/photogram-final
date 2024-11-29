@@ -53,6 +53,12 @@ GEM
     active_link_to (1.0.5)
       actionpack
       addressable
+    active_storage_validations (1.3.4)
+      activejob (>= 6.1.4)
+      activemodel (>= 6.1.4)
+      activestorage (>= 6.1.4)
+      activesupport (>= 6.1.4)
+      marcel (>= 1.0.3)
     activejob (7.1.3.3)
       activesupport (= 7.1.3.3)
       globalid (>= 0.3.6)
@@ -441,6 +447,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_link_to
+  active_storage_validations
   annotate
   appdev_support
   awesome_print
@@ -459,6 +466,7 @@ DEPENDENCIES
   grade_runner
   htmlbeautifier
   http
+  image_processing
   importmap-rails
   jbuilder
   pg (~> 1.1)
