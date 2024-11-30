@@ -36,6 +36,14 @@ class User < ApplicationRecord
   has_many :sent_follow_requests, class_name: 'FollowRequest', foreign_key: :sender_id, dependent: :destroy
   has_many :received_follow_requests, class_name: 'FollowRequest', foreign_key: :recipient_id, dependent: :destroy
 
+  def following?(other_user)
+    received_follow_requests.exists?(sender: self, recipient: other_user, status: 'accepted')
+  end
+
+  def follow_request_pending?(other_user)
+    follow_requests.exists?(recipient: other_user, status: 'pending')
+  end
+
   # Accepted Follow Requests
   has_many :accepted_sent_follow_requests, -> { where(status: 'accepted') }, class_name: 'FollowRequest', foreign_key: :sender_id
   has_many :accepted_received_follow_requests, -> { where(status: 'accepted') }, class_name: 'FollowRequest', foreign_key: :recipient_id
@@ -47,4 +55,3 @@ class User < ApplicationRecord
   # Validations
   validates :username, presence: true, uniqueness: true
 end
-

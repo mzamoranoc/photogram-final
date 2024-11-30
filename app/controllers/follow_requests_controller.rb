@@ -1,4 +1,5 @@
 class FollowRequestsController < ApplicationController
+  before_action :authenticate_user!
   def create
     @recipient = User.find(params[:recipient_id])
     @follow_request = current_user.sent_follow_requests.build(recipient: @recipient)

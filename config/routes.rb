@@ -3,7 +3,13 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  resources :users, only: [:index, :show], param: :username
+  resources :users, only: [:index, :show], param: :username do
+    member do
+      post :follow_request
+      delete :unfollow_request
+      delete :cancel_follow_request
+    end
+  end
 
   resources :photos do
     collection do
@@ -21,3 +27,4 @@ Rails.application.routes.draw do
     end
   end
 end
+

@@ -1,4 +1,11 @@
-<h1>List of users</h1>
+<h1>Welcome to Photogram</h1>
+
+<% if user_signed_in? %>
+  <h2>Add a New Photo</h2>
+  <%= render 'photos/form', photo: Photo.new %>
+<% end %>
+
+<h1>List of Users</h1>
 
 <table border="1">
   <tr>

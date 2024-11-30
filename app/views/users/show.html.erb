@@ -1,0 +1,22 @@
+<h1><%= @user.username %>'s Profile</h1>
+
+<p>
+  <strong>Email:</strong> <%= @user.email %>
+</p>
+
+<p>
+  <strong>Private Account:</strong> <%= @user.private? ? 'Yes' : 'No' %>
+</p>
+
+<h2>Photos</h2>
+<ul>
+  <% @user.photos.each do |photo| %>
+    <li>
+      <%= image_tag photo.image if photo.image.attached? %>
+      <p><%= photo.caption %></p>
+      <p><%= link_to 'View Photo', photo_path(photo) %></p>
+    </li>
+  <% end %>
+</ul>
+
+<%= link_to 'Back to All Users', users_path %>
