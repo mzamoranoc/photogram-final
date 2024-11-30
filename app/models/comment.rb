@@ -11,7 +11,7 @@
 #
 class Comment < ApplicationRecord
   belongs_to :photo, counter_cache: :comments_count
-  belongs_to :author, class_name: 'User', counter_cache: :comments_count
+  belongs_to :author, class_name: 'User', foreign_key: 'author_id', counter_cache: :comments_count
 
   validates :body, presence: true
 end

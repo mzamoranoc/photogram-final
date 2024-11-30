@@ -1,6 +1,6 @@
 class PhotosController < ApplicationController
   before_action :set_photo, only: [:show, :edit, :update, :destroy]
-  skip_before_action :authenticate_user!, only: [:index, :show] #borre show en [:index, :show]
+  skip_before_action :authenticate_user!, only: [:index] #borre show en [:index, :show]
 
   def index
     @photos = Photo.all.order(created_at: :desc)

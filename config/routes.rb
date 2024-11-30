@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       get :discovery
     end
     resources :comments, only: [:create, :destroy]
-    resource :like, only: [:create, :destroy]
+    resources :likes, only: [:create, :destroy]
   end
 
   resources :follow_requests, only: [:create, :destroy] do
@@ -27,4 +27,3 @@ Rails.application.routes.draw do
     end
   end
 end
-

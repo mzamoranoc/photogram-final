@@ -6,12 +6,97 @@
   <p>No image uploaded.</p>
 <% end %>
 
-<p><strong>Caption:</strong> <%= @photo.caption %></p>
-<p><strong>Posted by:</strong> <%= @photo.owner.username %></p>
+<dl>
+  <dt>Caption</dt>
+  <dd>
+    <%= @photo.caption %>
+  </dd>
+</dl>
+
+<dl>
+  <dt>Owner</dt>
+  <dd>
+    <%= @photo.owner.username %>
+  </dd>
+</dl>
+
+<dl>
+  <dt>Comments count</dt>
+  <dd>
+    <%= @photo.comments.count %>
+  </dd>
+</dl>
+
+<dl>
+  <dt>Posted</dt>
+  <dd>
+    <%= time_ago_in_words(@photo.created_at) %> ago
+  </dd>
+</dl>
+
+<h2>Comments</h2>
+
+<table>
+  <tr>
+    <th>Commenter</th>
+    <th>Comment</th>
+    <th>Posted</th>
+  </tr>
+
+  <% @photo.comments.each do |comment| %>
+    <tr>
+      <td>
+        <%= comment.author.username %>
+      </td>
+
+      <td>
+        <%= comment.body %>
+      </td>
+
+      <td>
+        <%= time_ago_in_words(comment.created_at) %> ago
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+
+<% if user_signed_in? %>
+  <% if @photo.likes.exists?(fan_id: current_user.id) %>
+    <dt>Unlike</dt>
+    <dd>
+      <%= link_to 'Unlike', photo_like_path(@photo, @photo.likes.find_by(fan_id: current_user.id)), method: :delete %>
+    </dd>
+  <% else %>
+    <dt>Add a fan</dt>
+    <dd>
+      <%= form_with url: photo_likes_path(@photo), method: :post, local: true do |form| %>
+        <%= form.hidden_field :fan_id, value: current_user.id %>
+        <%= form.submit 'Like' %>
+      <% end %>
+    </dd>
+  <% end %>
+<% end %>
+
+<% if user_signed_in? %>
+  <h3>Add a new comment</h3>
+  <%= form_with model: [@photo, Comment.new], local: true do |form| %>
+    <%= form.hidden_field :author_id, value: current_user.id %>
+    <div>
+      <%= form.label :body, 'Comment' %>
+      <%= form.text_area :body, placeholder: 'Enter a comment...' %>
+    </div>
+    <%= form.submit 'Add comment' %>
+  <% end %>
+<% else %>
+  <p>You must be signed in to add a comment.</p>
+<% end %>
 
 <div>
-  <%= link_to "Edit this photo", edit_photo_path(@photo) %> |
-  <%= link_to "Back to photos", photos_path %>
+<%= link_to "Back to photos", photos_path %>
 
-  <%= button_to "Destroy this photo", @photo, method: :delete %>
+<% if current_user == @photo.owner %>
+  <%= link_to 'Edit this photo', edit_photo_path(@photo) %>
+  <%= button_to 'Delete this photo', @photo, method: :delete, data: { confirm: 'Are you sure?' } %>
+<% end %>
 </div>
