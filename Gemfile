@@ -4,6 +4,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.2.1"
 
 #just to make sure
+gem "cloudinary"
+
 #gem "devise"
 gem "active_storage_validations"
 gem "image_processing"
