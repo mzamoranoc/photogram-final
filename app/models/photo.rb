@@ -18,7 +18,7 @@ class Photo < ApplicationRecord
 
   # Mount the uploader
   mount_uploader :image, ImageUploader
-
+  
   validates :caption, presence: true
   validates :image, attached: true, content_type: ['image/png', 'image/jpg', 'image/jpeg']
 end

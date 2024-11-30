@@ -1,22 +1,124 @@
-<h1><%= @user.username %>'s Profile</h1>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
 
-<p>
-  <strong>Email:</strong> <%= @user.email %>
-</p>
+  <body>
+    <ul>
+      <li>
+        <%= link_to 'All users', users_path %>
+      </li>
+      <li>
+        <%= link_to 'All public photos', photos_path %>
+      </li>
 
-<p>
-  <strong>Private Account:</strong> <%= @user.private? ? 'Yes' : 'No' %>
-</p>
+      <% if user_signed_in? %>
+        <li>
+          <%= link_to current_user.username, edit_user_registration_path %>
+        </li>
+        <li>
+          <%= link_to 'Sign out', destroy_user_session_path, method: :delete %>
+        </li>
+      <% else %>
+        <li>
+          <%= link_to 'Sign in', new_user_session_path %>
+        </li>
+        <li>
+          <%= link_to 'Sign up', new_user_registration_path %>
+        </li>
+      <% end %>
+    </ul>
 
-<h2>Photos</h2>
-<ul>
-  <% @user.photos.each do |photo| %>
-    <li>
-      <%= image_tag photo.image if photo.image.present? %>
-      <p><%= photo.caption %></p>
-      <p><%= link_to 'View Photo', photo_path(photo) %></p>
-    </li>
-  <% end %>
-</ul>
+    <h1><%= @user.username %></h1>
 
-<%= link_to 'Back to All Users', users_path %>
+    <dl>
+      <dt>Private</dt>
+      <dd><%= @user.private_account? ? 'Yes' : 'No' %></dd>
+
+      <dt>Followers</dt>
+      <dd>
+        <%= @user.followers.count %>
+
+        <% if user_signed_in? && current_user != @user %>
+          <% if current_user.following?(@user) %>
+            <div>
+              <%= link_to 'Unfollow', unfollow_user_path(@user.username), method: :delete %>
+            </div>
+          <% else %>
+            <div>
+              <%= link_to 'Follow', follow_user_path(@user.username), method: :post %>
+            </div>
+          <% end %>
+        <% end %>
+      </dd>
+
+      <dt>Following</dt>
+      <dd><%= @user.following.count %></dd>
+    </dl>
+
+    <nav>
+      <ul>
+        <li>
+          <%= link_to 'Profile', user_path(@user.username) %>
+        </li>
+        <li>
+          <%= link_to 'Liked photos', liked_photos_user_path(@user.username) %>
+        </li>
+        <li>
+          <%= link_to 'Feed', feed_user_path(@user.username) %>
+        </li>
+        <li>
+          <%= link_to 'Discover', discover_user_path(@user.username) %>
+        </li>
+      </ul>
+    </nav>
+
+    <h2>Own photos (<%= @user.photos.count %>)</h2>
+
+    <table border="1">
+      <tr>
+        <th>Image</th>
+        <th>Owner</th>
+        <th>Caption</th>
+        <th>Posted</th>
+        <th>Likes</th>
+        <th></th>
+      </tr>
+
+      <% @user.photos.each do |photo| %>
+        <tr>
+          <td>
+            <% if photo.image.present? %>
+              <%= image_tag photo.image.url, class: 'img-responsive', width: '100' %>
+            <% else %>
+              No image uploaded.
+            <% end %>
+          </td>
+
+          <td>
+            <%= photo.owner.username %>
+          </td>
+
+          <td>
+            <%= photo.caption %>
+          </td>
+
+          <td>
+            <%= time_ago_in_words(photo.created_at) %> ago
+          </td>
+
+          <td>
+            <%= photo.likes.count %>
+          </td>
+
+          <td>
+            <%= link_to 'Show details', photo_path(photo) %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+
+  </body>
+</html>
