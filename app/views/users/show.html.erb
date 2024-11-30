@@ -12,7 +12,7 @@
 <ul>
   <% @user.photos.each do |photo| %>
     <li>
-      <%= image_tag photo.image if photo.image.attached? %>
+      <%= image_tag photo.image if photo.image.present? %>
       <p><%= photo.caption %></p>
       <p><%= link_to 'View Photo', photo_path(photo) %></p>
     </li>

@@ -9,7 +9,7 @@
 
 <% @photos.each do |photo| %>
   <div class="photo">
-    <% if photo.image.attached? %>
+    <% if photo.image.present? %>
       <%= image_tag photo.image %>
     <% end %>
     <p><%= photo.caption %></p>
