@@ -1,6 +1,13 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @photo %>
+<% if @photo.image.present? %>
+  <%= image_tag @photo.image.url, alt: @photo.caption, class: 'img-responsive' %>
+<% else %>
+  <p>No image uploaded.</p>
+<% end %>
+
+<p><strong>Caption:</strong> <%= @photo.caption %></p>
+<p><strong>Posted by:</strong> <%= @photo.owner.username %></p>
 
 <div>
   <%= link_to "Edit this photo", edit_photo_path(@photo) %> |

@@ -16,9 +16,9 @@ class Photo < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
 
-  has_one_attached :image
+  # Mount the uploader
+  mount_uploader :image, ImageUploader
 
   validates :caption, presence: true
   validates :image, attached: true, content_type: ['image/png', 'image/jpg', 'image/jpeg']
 end
-
