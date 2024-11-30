@@ -14,6 +14,7 @@ class FollowRequest < ApplicationRecord
   belongs_to :recipient, class_name: 'User'
 
   validates :recipient_id, uniqueness: { scope: :sender_id }
-
+  validates :sender_id, uniqueness: { scope: :recipient_id }
+  
   scope :pending, -> { where(status: 'pending') }
 end

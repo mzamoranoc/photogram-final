@@ -20,11 +20,11 @@
         <% if user_signed_in? && current_user != user %>
           <td>
             <% if current_user.following?(user) %>
-              <%= button_to 'Unfollow', unfollow_request_path(user), method: :delete %>
+              <%= button_to 'Unfollow', unfollow_request_user_path(user.username), method: :delete %>
             <% elsif current_user.follow_request_pending?(user) %>
-              Request sent | <%= button_to 'Cancel', cancel_follow_request_path(user), method: :delete %>
+              Request sent | <%= button_to 'Cancel', cancel_follow_request_user_path(user.username), method: :delete %>
             <% else %>
-              <%= button_to 'Follow', follow_request_path(user), method: :post %>
+              <%= button_to 'Follow', follow_request_user_path(user.username), method: :post %>
             <% end %>
           </td>
         <% end %>
