@@ -36,12 +36,13 @@ class User < ApplicationRecord
   has_many :sent_follow_requests, class_name: 'FollowRequest', foreign_key: :sender_id, dependent: :destroy
   has_many :received_follow_requests, class_name: 'FollowRequest', foreign_key: :recipient_id, dependent: :destroy
 
+  # Methods
   def following?(other_user)
-    received_follow_requests.exists?(sender: self, recipient: other_user, status: 'accepted')
+    sent_follow_requests.exists?(recipient_id: other_user.id, status: 'accepted')
   end
 
   def follow_request_pending?(other_user)
-    follow_requests.exists?(recipient: other_user, status: 'pending')
+    sent_follow_requests.exists?(recipient_id: other_user.id, status: 'pending')
   end
 
   # Accepted Follow Requests
