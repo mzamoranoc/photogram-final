@@ -5,6 +5,26 @@
   <%= render 'photos/form', photo: Photo.new %>
 <% end %>
 
+<h1>Recent Photos</h1>
+
+<% @photos.each do |photo| %>
+  <div class="photo">
+    <% if photo.image.attached? %>
+      <%= image_tag photo.image %>
+    <% end %>
+    <p><%= photo.caption %></p>
+    <p>Posted by: <%= button_to photo.user.username, user_path(photo.user.username) %></p>
+
+    <% if user_signed_in? %>
+      <% if current_user.liked_photos.exists?(photo.id) %>
+        <%= button_to 'Unlike', photo_like_path(photo), method: :delete %>
+      <% else %>
+        <%= button_to 'Like', photo_like_path(photo), method: :post %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+
 <h1>List of Users</h1>
 
 <table border="1">

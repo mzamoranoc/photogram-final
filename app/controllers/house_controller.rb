@@ -3,5 +3,6 @@ class HouseController < ApplicationController
 
   def index
     @users = User.order(username: :asc)
+    @photos = Photo.order(created_at: :desc)
   end
 end
