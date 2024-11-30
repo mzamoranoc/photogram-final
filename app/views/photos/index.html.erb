@@ -1,15 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Photos Index</title>
+  </head>
+  <body>
+    <h1>Photos</h1>
 
-<h1>Photos</h1>
+    <p style="color: green"><%= notice %></p>
 
-<p style="color: green"><%= notice %></p>
+    <form action="<%= photos_path %>" method="post" enctype="multipart/form-data">
+      <label for="photo_image">Image</label>
+      <input type="file" id="photo_image" name="photo[image]">
+      <br>
 
-<div id="photos">
-  <% @photos.each do |photo| %>
-    <%= render photo %>
-    <p>
-      <%= link_to "Show this photo", photo %>
-    </p>
-  <% end %>
-</div>
+      <label for="photo_caption">Caption</label>
+      <textarea id="photo_caption" name="photo[caption]" placeholder="Enter a caption for the photo"></textarea>
+      <br>
 
-<%= button_to "New photo", new_photo_path %>
+      <button type="submit">Add photo</button>
+    </form>
+
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Caption</th>
+          <th>Owner</th>
+          <th>Posted</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @photos.each do |photo| %>
+          <tr>
+            <td>
+              <% if photo.image.present? %>
+                <%= image_tag photo.image.url, alt: photo.caption, class: 'img-responsive', width: "100" %>
+              <% else %>
+                <p>No image uploaded.</p>
+              <% end %>
+            </td>
+            <td><%= photo.caption %></td>
+            <td><%= photo.owner.username %></td>
+            <td><%= time_ago_in_words(photo.created_at) %> ago</td>
+            <td>
+              <%= link_to "Show", photo_path(photo) %>
+              <% if photo.owner == current_user %>
+                | <%= link_to "Edit", edit_photo_path(photo) %>
+                | <%= button_to "Delete", photo_path(photo), method: :delete, data: { confirm: "Are you sure?" } %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </body>
+</html>
