@@ -12,13 +12,13 @@ class LikesController < ApplicationController
 
   def destroy
     @photo = Photo.find(params[:photo_id])
-    @like = @photo.likes.find_by(fan: current_user)
-  
+    @like = @photo.likes.find_by(id: params[:id], fan: current_user)
+    
     if @like
       @like.destroy
-      redirect_to root_path, alert: 'Photo was successfully unliked.'
+      redirect_to @photo, notice: 'Photo was successfully unliked.'
     else
-      redirect_to root_path, alert: 'Unable to unlike the photo.'
+      redirect_to @photo, alert: 'Unable to unlike the photo.'
     end
   end
 end

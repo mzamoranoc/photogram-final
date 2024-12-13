@@ -101,7 +101,7 @@
             <% if user_signed_in? %>
               <% if current_user.liked_photos.exists?(photo.id) %>
                 <% like = photo.likes.find_by(fan: current_user) %>
-                <%= button_to 'Unlike', photo_like_path(photo, like), method: :delete %>
+                <%= button_to 'Unlike', photo_like_path(photo, like), method: :delete if like.present? %>
               <% else %>
                 <%= button_to 'Like', photo_likes_path(photo), method: :post %>
               <% end %>
