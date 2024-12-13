@@ -10,59 +10,44 @@
 
    <% if @photo.image.present? %>
      <%= image_tag @photo.image.url, alt: @photo.caption, class: 'img-responsive' %>
-   <% else %>
-     <p>No image uploaded.</p>
    <% end %>
 
    <dl>
      <dt>Caption</dt>
-     <dd>
-       <%= @photo.caption %>
-     </dd>
+     <dd><%= @photo.caption %></dd>
    </dl>
 
    <dl>
      <dt>Owner</dt>
-     <dd>
-       <%= @photo.owner.username %>
-     </dd>
-   </dl>
-
-   <dl>
-     <dt>Comments count</dt>
-     <dd>
-       <%= @photo.comments.count %>
-     </dd>
+     <dd><%= @photo.owner.username %></dd>
    </dl>
 
    <dl>
      <dt>Posted</dt>
-     <dd>
-       <%= time_ago_in_words(@photo.created_at) %> ago
-     </dd>
+     <dd><%= time_ago_in_words(@photo.created_at) %> ago</dd>
    </dl>
 
    <dl>
      <dt>Likes</dt>
-     <dd>
-       <%= @photo.likes.count %>
-     </dd>
+     <dd><%= @photo.likes.count %></dd>
    </dl>
 
    <% if user_signed_in? %>
-      <% if current_user.liked_photos.exists?(@photo.id) %>
-         <% like = @photo.likes.find_by(fan: current_user) %>
-         <%= button_to 'Unlike', 
-            photo_like_path(@photo, like), 
-            method: :delete if like.present? %>
+     <% if current_user.liked_photos.exists?(@photo.id) %>
+       <% like = @photo.likes.find_by(fan: current_user) %>
+       <%= link_to 'Unlike', 
+           photo_like_path(@photo, like), 
+           method: :delete,
+           class: "button" if like.present? %>
      <% else %>
-       <%= button_to 'Like', 
-           photo_likes_path(photo_id: @photo.id), 
-           method: :post %>
+       <%= link_to 'Like', 
+           photo_likes_path(@photo), 
+           method: :post,
+           class: "button" %>
      <% end %>
    <% end %>
 
-   <h2>Comments</h2>
+   <h2>Comments (<%= @photo.comments.count %>)</h2>
 
    <table>
      <tr>
@@ -74,24 +59,16 @@
 
      <% @photo.comments.each do |comment| %>
        <tr>
-         <td>
-           <%= comment.author.username %>
-         </td>
-
-         <td>
-           <%= comment.body %>
-         </td>
-
-         <td>
-           <%= time_ago_in_words(comment.created_at) %> ago
-         </td>
-
+         <td><%= comment.author.username %></td>
+         <td><%= comment.body %></td>
+         <td><%= time_ago_in_words(comment.created_at) %> ago</td>
          <td>
            <% if current_user == comment.author %>
-             <%= button_to "Delete", 
+             <%= button_to "Delete comment", 
                  photo_comment_path(@photo, comment), 
                  method: :delete, 
-                 data: { confirm: "Are you sure?" } %>
+                 data: { confirm: "Are you sure?" },
+                 class: "button" %>
            <% end %>
          </td>
        </tr>
@@ -101,23 +78,22 @@
    <% if user_signed_in? %>
      <h3>Add a new comment</h3>
      <%= form_with model: [@photo, Comment.new], local: true do |form| %>
-       <%= form.hidden_field :author_id, value: current_user.id %>
        <div>
          <%= form.label :body, 'Comment' %>
          <%= form.text_area :body, placeholder: 'Enter a comment...' %>
        </div>
-       <%= form.submit 'Add comment' %>
+       <%= form.submit 'Add comment', class: "button" %>
      <% end %>
-   <% else %>
-     <p>You must be signed in to add a comment.</p>
    <% end %>
 
    <div class="actions">
      <%= link_to "Back to photos", photos_path %>
 
      <% if current_user == @photo.owner %>
-       | <%= link_to 'Edit this photo', edit_photo_path(@photo) %>
-       | <%= button_to 'Delete this photo', @photo, method: :delete, data: { confirm: 'Are you sure?' } %>
+       <%= link_to 'Update photo', edit_photo_path(@photo) %>
+       <%= link_to 'Delete this photo', photo_path(@photo), 
+           method: :delete, 
+           data: { confirm: 'Are you sure?' } %>
      <% end %>
    </div>
  </body>

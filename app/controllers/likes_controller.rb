@@ -4,21 +4,20 @@ class LikesController < ApplicationController
     @like = @photo.likes.build(fan: current_user)
   
     if @like.save
-      redirect_to root_path, notice: 'Photo was successfully liked.'
+      redirect_back(fallback_location: root_path, notice: 'Like created successfully')
     else
-      redirect_to root_path, alert: 'Unable to like the photo.'
+      redirect_back(fallback_location: root_path, alert: 'Unable to like photo')
     end
   end
 
   def destroy
     @photo = Photo.find(params[:photo_id])
-    @like = @photo.likes.find_by(id: params[:id], fan: current_user)
+    @like = @photo.likes.find_by(fan: current_user)
     
-    if @like
-      @like.destroy
-      redirect_to @photo, notice: 'Photo was successfully unliked.'
+    if @like&.destroy
+      redirect_back(fallback_location: root_path, notice: 'Photo unliked successfully')
     else
-      redirect_to @photo, alert: 'Unable to unlike the photo.'
+      redirect_back(fallback_location: root_path, alert: 'Unable to unlike photo')
     end
   end
 end

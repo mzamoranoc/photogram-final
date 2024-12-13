@@ -13,13 +13,20 @@
       <%= image_tag photo.image.url %>
     <% end %>
     <p><%= photo.caption %></p>
-    <p>Posted by: <%= button_to photo.owner.username, user_path(photo.owner.username) %></p>
+    <p>Posted by: <%= link_to photo.owner.username, user_path(photo.owner.username) %></p>
 
     <% if user_signed_in? %>
       <% if current_user.liked_photos.exists?(photo.id) %>
-        <%= button_to 'Unlike', photo_like_path(photo), method: :delete %>
+        <% like = photo.likes.find_by(fan: current_user) %>
+        <%= link_to 'Unlike', 
+            photo_like_path(photo, like), 
+            method: :delete,
+            class: "button" if like.present? %>
       <% else %>
-        <%= button_to 'Like', photo_like_path(photo), method: :post %>
+        <%= link_to 'Like', 
+            photo_likes_path(photo), 
+            method: :post,
+            class: "button" %>
       <% end %>
     <% end %>
   </div>
@@ -31,7 +38,7 @@
   <tr>
     <th>Username</th>
     <th>Private?</th>
-    <th></th>
+    <th>Actions</th>
   </tr>
 
   <% @users.each do |user| %>
