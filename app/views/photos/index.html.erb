@@ -8,17 +8,19 @@
 
     <p style="color: green"><%= notice %></p>
 
-    <form action="<%= photos_path %>" method="post" enctype="multipart/form-data">
-      <label for="photo_image">Image</label>
-      <input type="file" id="photo_image" name="photo[image]">
-      <br>
+    <%= form_with(model: Photo.new, local: true) do |f| %>
+      <div>
+        <%= f.label :image %>
+        <%= f.file_field :image %>
+      </div>
 
-      <label for="photo_caption">Caption</label>
-      <textarea id="photo_caption" name="photo[caption]" placeholder="Enter a caption for the photo"></textarea>
-      <br>
+      <div>
+        <%= f.label :caption %>
+        <%= f.text_area :caption, placeholder: "Enter a caption for the photo" %>
+      </div>
 
-      <button type="submit">Add photo</button>
-    </form>
+      <%= f.submit "Add photo" %>
+    <% end %>
 
     <table border="1">
       <thead>

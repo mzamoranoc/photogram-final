@@ -12,7 +12,7 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    @comment = current_user.comments.find(params[:username])
+    @comment = current_user.comments.find(params[:id])
     @photo = @comment.photo
     @comment.destroy
     redirect_to @photo, notice: 'Comment was successfully destroyed.'
