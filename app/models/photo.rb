@@ -20,5 +20,6 @@ class Photo < ApplicationRecord
   mount_uploader :image, ImageUploader
   
   validates :caption, presence: true
-  validates :image, attached: true, content_type: ['image/png', 'image/jpg', 'image/jpeg']
+  validates :image, presence: true
+  validates_integrity_of :image
 end
