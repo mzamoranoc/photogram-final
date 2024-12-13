@@ -6,9 +6,14 @@ class PhotosController < ApplicationController
     @photos = Photo.all.order(created_at: :desc)
   end
 
-  def show
+  def index
+    @photos = Photo.all.order(created_at: :desc)
   end
-
+  
+  def show
+    @photo = Photo.find(params[:id])
+  end
+  
   def new
     @photo = current_user.photos.build
   end

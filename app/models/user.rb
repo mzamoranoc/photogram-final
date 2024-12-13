@@ -32,7 +32,7 @@ class User < ApplicationRecord
   has_many :comments, foreign_key: :author_id, dependent: :destroy
   has_many :likes, foreign_key: :fan_id, dependent: :destroy
   has_many :liked_photos, through: :likes, source: :photo 
-  
+
   # Follow Requests
   has_many :sent_follow_requests, class_name: 'FollowRequest', foreign_key: :sender_id, dependent: :destroy
   has_many :received_follow_requests, class_name: 'FollowRequest', foreign_key: :recipient_id, dependent: :destroy
@@ -51,7 +51,7 @@ class User < ApplicationRecord
   has_many :accepted_received_follow_requests, -> { where(status: 'accepted') }, class_name: 'FollowRequest', foreign_key: :recipient_id
 
   # Followers and Following Users
-  has_many :following_users, through: :accepted_sent_follow_requests, source: :recipient
+  has_many :following, through: :accepted_sent_follow_requests, source: :recipient
   has_many :followers, through: :accepted_received_follow_requests, source: :sender
 
   # Validations

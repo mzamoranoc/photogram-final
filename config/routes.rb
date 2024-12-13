@@ -5,6 +5,9 @@ Rails.application.routes.draw do
 
   resources :users, only: [:index, :show], param: :username do
     member do
+      get :liked_photos  
+      get :feed
+      get :discover
       post :follow_request
       delete :unfollow_request
       delete :cancel_follow_request

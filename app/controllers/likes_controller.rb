@@ -2,17 +2,6 @@ class LikesController < ApplicationController
   def create
     @photo = Photo.find(params[:photo_id])
     @like = @photo.likes.build(fan: current_user)
-
-    if @like.save
-      redirect_to @photo, notice: 'Photo liked.'
-    else
-      redirect_to @photo, alert: 'Unable to like photo.'
-    end
-  end
-
-  def create
-    @photo = Photo.find(params[:photo_id])
-    @like = @photo.likes.build(fan: current_user)
   
     if @like.save
       redirect_to root_path, notice: 'Photo was successfully liked.'

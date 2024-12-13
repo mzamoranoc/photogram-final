@@ -19,7 +19,7 @@
           <%= link_to current_user.username, edit_user_registration_path %>
         </li>
         <li>
-          <%= link_to 'Sign out', destroy_user_session_path, method: :delete %>
+          <%= button_to 'Sign out', destroy_user_session_path, method: :delete %>
         </li>
       <% else %>
         <li>
@@ -35,7 +35,7 @@
 
     <dl>
       <dt>Private</dt>
-      <dd><%= @user.private? ? 'Yes' : 'No' %></dd>
+      <dd><%= @user.private == true ? 'Yes' : 'No' %></dd>
 
       <dt>Followers</dt>
       <dd>
@@ -44,36 +44,23 @@
         <% if user_signed_in? && current_user != @user %>
           <% if current_user.following?(@user) %>
             <div>
-              <%= link_to 'Unfollow', unfollow_user_path(@user.username), method: :delete %>
+              <%= button_to 'Unfollow', unfollow_request_user_path(@user.username), method: :delete %>
+            </div>
+          <% elsif current_user.follow_request_pending?(@user) %>
+            <div>
+              <%= button_to 'Cancel Follow Request', cancel_follow_request_user_path(@user.username), method: :delete %>
             </div>
           <% else %>
             <div>
-              <%= link_to 'Follow', follow_user_path(@user.username), method: :post %>
+              <%= button_to 'Follow', follow_request_user_path(@user.username), method: :post %>
             </div>
           <% end %>
         <% end %>
       </dd>
 
       <dt>Following</dt>
-      <dd><%= @user.following.count %></dd>
+      <dd><%= @user.following_users.count %></dd>
     </dl>
-
-    <nav>
-      <ul>
-        <li>
-          <%= link_to 'Profile', user_path(@user.username) %>
-        </li>
-        <li>
-          <%= link_to 'Liked photos', liked_photos_user_path(@user.username) %>
-        </li>
-        <li>
-          <%= link_to 'Feed', feed_user_path(@user.username) %>
-        </li>
-        <li>
-          <%= link_to 'Discover', discover_user_path(@user.username) %>
-        </li>
-      </ul>
-    </nav>
 
     <h2>Own photos (<%= @user.photos.count %>)</h2>
 
@@ -84,7 +71,7 @@
         <th>Caption</th>
         <th>Posted</th>
         <th>Likes</th>
-        <th></th>
+        <th>Actions</th>
       </tr>
 
       <% @user.photos.each do |photo| %>
@@ -98,7 +85,7 @@
           </td>
 
           <td>
-            <%= photo.owner.username %>
+            <%= link_to photo.owner.username, user_path(photo.owner.username) %>
           </td>
 
           <td>
@@ -111,6 +98,14 @@
 
           <td>
             <%= photo.likes.count %>
+            <% if user_signed_in? %>
+              <% if current_user.liked_photos.exists?(photo.id) %>
+                <% like = photo.likes.find_by(fan: current_user) %>
+                <%= button_to 'Unlike', photo_like_path(photo, like), method: :delete %>
+              <% else %>
+                <%= button_to 'Like', photo_likes_path(photo), method: :post %>
+              <% end %>
+            <% end %>
           </td>
 
           <td>

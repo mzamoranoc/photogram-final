@@ -62,19 +62,11 @@
 
 
 <% if user_signed_in? %>
-  <% if @photo.likes.exists?(fan_id: current_user.id) %>
-    <dt>Unlike</dt>
-    <dd>
-      <%= link_to 'Unlike', photo_like_path(@photo, @photo.likes.find_by(fan_id: current_user.id)), method: :delete %>
-    </dd>
+  <% if current_user.liked_photos.exists?(photo.id) %>
+    <% like = photo.likes.find_by(fan: current_user) %>
+    <%= button_to 'Unlike', photo_like_path(photo_id: photo.id, id: like.id), method: :delete %>
   <% else %>
-    <dt>Add a fan</dt>
-    <dd>
-      <%= form_with url: photo_likes_path(@photo), method: :post, local: true do |form| %>
-        <%= form.hidden_field :fan_id, value: current_user.id %>
-        <%= form.submit 'Like' %>
-      <% end %>
-    </dd>
+    <%= button_to 'Like', photo_likes_path(photo), method: :post %>
   <% end %>
 <% end %>
 
