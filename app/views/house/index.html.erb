@@ -10,7 +10,7 @@
 <% @photos.each do |photo| %>
   <div class="photo">
     <% if photo.image.present? %>
-      <%= image_tag photo.image %>
+      <%= image_tag photo.image.url %>
     <% end %>
     <p><%= photo.caption %></p>
     <p>Posted by: <%= button_to photo.user.username, user_path(photo.user.username) %></p>
