@@ -22,9 +22,9 @@ class UsersController < ApplicationController
     @user = User.find_by(username: params[:username])
     @follow_request = current_user.sent_follow_requests.build(recipient: @user)
     @follow_request.status = @user.private? ? 'pending' : 'accepted'
-
+  
     if @follow_request.save
-      redirect_to users_path, notice: 'Follow request sent.'
+      redirect_to users_path, notice: 'Follow request sent successfully.'
     else
       redirect_to users_path, alert: 'Unable to send follow request.'
     end

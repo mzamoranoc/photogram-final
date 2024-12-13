@@ -39,7 +39,7 @@ class User < ApplicationRecord
 
   # Methods
   def following?(other_user)
-    sent_follow_requests.exists?(recipient_id: other_user.id, status: 'accepted')
+    sent_follow_requests.exists?(recipient: other_user, status: 'accepted')
   end
 
   def follow_request_pending?(other_user)

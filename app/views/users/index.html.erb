@@ -21,7 +21,7 @@
               <% if current_user.following?(user) %>
                 <%= button_to 'Unfollow', unfollow_request_user_path(user.username), method: :delete %>
               <% elsif current_user.follow_request_pending?(user) %>
-                <%= button_to 'Cancel Follow Request', cancel_follow_request_user_path(user.username), method: :delete %>
+                <%= button_to 'Cancel Request', cancel_follow_request_user_path(user.username), method: :delete %>
               <% else %>
                 <%= button_to 'Follow', follow_request_user_path(user.username), method: :post %>
               <% end %>
